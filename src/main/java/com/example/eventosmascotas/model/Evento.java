@@ -1,24 +1,46 @@
 package com.example.eventosmascotas.model;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.JoinColumn;
 import java.util.List;
 
+@Entity
+@Table(name = "eventos")
 public class Evento {
-    private int id;
+    @Id
+    private Long id;
+
     private String nombre;
     private String descripcion;
     private String fecha;
+
+    @ManyToMany
+    @JoinTable(
+        name = "evento_participante",
+        joinColumns = @JoinColumn(name = "evento_id"),
+        inverseJoinColumns = @JoinColumn(name = "participante_id")
+    )
+
     private List<Participante> participantes;
     
-    public Evento(int id, String nombre, String descripcion, String fecha, List<Participante> participantes) {
+    public Evento(Long id, String nombre, String descripcion, String fecha, List<Participante> participantes) {
         this.id = id;
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.fecha = fecha;
         this.participantes = participantes;
     }
-    public int getId() {
+
+    public Evento() {
+    }
+    
+    public Long getId() {
         return id;
     }
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
     public String getNombre() {

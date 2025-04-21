@@ -1,23 +1,35 @@
 package com.example.eventosmascotas.model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+import jakarta.persistence.Id;
+
+@Entity
+@Table(name = "participante")
 public class Participante {
-    private int id;
+    @Id
+    private Long id;
+    
     private String nombre;
     private String apellido;   
     private String correo;  
     private String mascota;
 
-    public Participante(int id, String nombre, String apellido, String correo, String mascota) {
+    public Participante(Long id, String nombre, String apellido, String correo, String mascota) {
         this.id = id;
         this.nombre = nombre;
         this.apellido = apellido;
         this.correo = correo;
         this.mascota = mascota;
     }
-    public int getId() {
+
+    public Participante() {
+    }
+
+    public Long getId() {
         return id;
     }
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
     public String getNombre() {
