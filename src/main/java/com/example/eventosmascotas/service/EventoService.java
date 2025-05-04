@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Random;
 import java.util.ArrayList;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.example.eventosmascotas.repository.EventoRepository;
 import com.example.eventosmascotas.repository.ParticipanteRepository;
@@ -14,11 +13,13 @@ import com.example.eventosmascotas.exception.EventoNotFoundException;
 
 @Service
 public class EventoService {
-    @Autowired
-    private EventoRepository eventoRepository;
-
-    @Autowired
+    
+    private EventoRepository eventoRepository;    
     private ParticipanteRepository participanteRepository;
+
+    public EventoService(EventoRepository eventoRepository) {
+        this.eventoRepository = eventoRepository;
+    }
 
     public List<Evento> obtenerTodos() {
         return eventoRepository.findAll();

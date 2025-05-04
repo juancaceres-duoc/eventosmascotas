@@ -5,6 +5,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.JoinColumn;
+
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -15,7 +17,7 @@ public class Evento {
 
     private String nombre;
     private String descripcion;
-    private String fecha;
+    private LocalDate fecha;
 
     @ManyToMany
     @JoinTable(
@@ -26,7 +28,7 @@ public class Evento {
 
     private List<Participante> participantes;
     
-    public Evento(Long id, String nombre, String descripcion, String fecha, List<Participante> participantes) {
+    public Evento(Long id, String nombre, String descripcion, LocalDate fecha, List<Participante> participantes) {
         this.id = id;
         this.nombre = nombre;
         this.descripcion = descripcion;
@@ -55,10 +57,10 @@ public class Evento {
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
-    public String getFecha() {
+    public LocalDate getFecha() {
         return fecha;
     }
-    public void setFecha(String fecha) {
+    public void setFecha(LocalDate fecha) {
         this.fecha = fecha;
     }
     public List<Participante> getParticipantes() {
