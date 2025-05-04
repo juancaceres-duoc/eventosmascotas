@@ -1,0 +1,8 @@
+FROM openjdk:21
+
+WORKDIR /app
+COPY target/eventosmascotas-0.0.1-SNAPSHOT.jar app.jar
+COPY Wallet_dba1 /app/oracle_wallet/
+EXPOSE 8080
+
+CMD ["java", "-Dspring.profiles.active=prod", "-Doracle.net.tns_admin=/app/oracle_wallet", "-jar", "app.jar"]
