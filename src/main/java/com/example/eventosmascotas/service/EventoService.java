@@ -17,8 +17,9 @@ public class EventoService {
     private EventoRepository eventoRepository;    
     private ParticipanteRepository participanteRepository;
 
-    public EventoService(EventoRepository eventoRepository) {
+    public EventoService(EventoRepository eventoRepository, ParticipanteRepository participanteRepository) {
         this.eventoRepository = eventoRepository;
+        this.participanteRepository = participanteRepository;
     }
 
     public List<Evento> obtenerTodos() {
