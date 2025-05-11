@@ -1,6 +1,7 @@
 package com.example.eventosmascotas;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 import java.time.LocalDate;
@@ -15,15 +16,18 @@ import com.example.eventosmascotas.service.EventoService;
 import com.example.eventosmascotas.model.Evento;
 import com.example.eventosmascotas.model.Participante;
 import com.example.eventosmascotas.repository.EventoRepository;
+import com.example.eventosmascotas.repository.ParticipanteRepository;
 
 public class EventoServiceTest {
     private EventoService eventoService;
     private EventoRepository eventoRepository;
+    private ParticipanteRepository participanteRepository;
 
     @BeforeEach
     public void setUp() {
         eventoRepository = mock(EventoRepository.class);
-        eventoService = new EventoService(eventoRepository, null);      
+        participanteRepository = mock(ParticipanteRepository.class);
+        eventoService = new EventoService(eventoRepository, participanteRepository);      
     }
 
     @Test
@@ -79,6 +83,49 @@ public class EventoServiceTest {
         assertEquals(2, resultado.getParticipantes().size());
         assertEquals("Pedro", resultado.getParticipantes().get(0).getNombre());
     }
-   
-    
+
+    @Test
+    public void testGuardar() {
+        Evento evento = new Evento();
+        evento.setId(1L);
+        evento.setNombre("Evento 1");
+        evento.setDescripcion("Descripcion 1");
+        evento.setFecha(LocalDate.parse("2023-10-01"));
+        List<Participante> participantes = Arrays.asList(
+        new Participante(1L, "Pedro", "Arias", "pedro@gmail.com", "Luna"),
+        new Participante(2L, "Sofia", "Martinez", "sofia@gmail.com", "Misifus")
+        );
+        evento.setParticipantes(participantes);
+        
+        when(participanteRepository.findAllById(any())).thenReturn(participantes);
+        when(eventoRepository.save(evento)).thenReturn(evento);
+        Evento resultado = eventoService.guardar(evento);
+
+        assertEquals("Evento 1", resultado.getNombre());    
+        assertEquals("Descripcion 1", resultado.getDescripcion());
+        assertEquals("2023-10-01", resultado.getFecha().toString());
+        assertEquals(2, resultado.getParticipantes().size());
+        assertEquals("Pedro", resultado.getParticipantes().get(0).getNombre());     
+        assertEquals("Sofia", resultado.getParticipantes().get(1).getNombre()); 
+    }
+
+    @Test
+    public void testEliminar() {
+        Evento evento = new Evento();
+        evento.setId(1L);
+        evento.setNombre("Evento 1");
+        evento.setDescripcion("Descripcion 1");
+        evento.setFecha(LocalDate.parse("2023-10-01"));
+        evento.setParticipantes(Arrays.asList(
+            new Participante(1L, "Pedro", "Arias", "pedro@gmail.com", "Luna"),
+            new Participante(2L, "Sofia", "Martinez", "sofia@gmail.com", "Misifus")
+            ));
+
+        when(eventoRepository.findById(1L)).thenReturn(Optional.of(evento));
+        eventoService.eliminar(1L);
+
+        verify(eventoRepository, times(1)).delete(evento);
+        verify(eventoRepository, times(1)).findById(1L);
+    }
+
 }
